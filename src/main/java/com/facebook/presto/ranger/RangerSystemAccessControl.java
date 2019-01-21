@@ -206,7 +206,7 @@ public class RangerSystemAccessControl
         return set;
     }
 
-        @Override
+    @Override
     public void checkCanCreateSchema(Identity identity, CatalogSchemaName schema)
     {
         if (!authorizer.canCreateResource(createResource(schema), identity) ||

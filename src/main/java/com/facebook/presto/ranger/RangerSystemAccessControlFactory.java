@@ -29,7 +29,7 @@ import java.util.Map;
 public class RangerSystemAccessControlFactory
         implements SystemAccessControlFactory
 {
-    private static volatile RangerPrestoPlugin rangerPlugin = null;
+    private static volatile RangerPrestoPlugin rangerPlugin;
     private static final Logger log = Logger.get(RangerSystemAccessControlFactory.class);
 
     @Override
