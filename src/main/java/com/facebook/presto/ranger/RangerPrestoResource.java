@@ -32,12 +32,12 @@ public class RangerPrestoResource
 
     public String getTable()
     {
-        return getValue(KEY_TABLE);
+        return (String) getValue(KEY_TABLE);
     }
 
     public String getDatabase()
     {
-        return getValue(KEY_DATABASE);
+        return (String) getValue(KEY_DATABASE);
     }
 
     public SchemaTableName getSchemaTable()

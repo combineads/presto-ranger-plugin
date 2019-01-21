@@ -87,15 +87,15 @@ public class RangerSystemAccessControl
     }
 
     @Override
-    public void checkCanSetUser(Principal principal, String userName)
+    public void checkCanSetUser(Optional<Principal> principal, String userName)
     {
         if (principal == null) {
             return;
         }
-        if (powerPrincipals.contains(principal.getName().toLowerCase())) {
+        if (powerPrincipals.contains(principal.get().getName().toLowerCase())) {
             return;
         }
-        String principalName = principal.getName()
+        String principalName = principal.get().getName()
                 .replaceAll("@.*", "")
                 .replaceAll("/.*", "");
         if (!principalName.equalsIgnoreCase(userName)) {
@@ -109,7 +109,6 @@ public class RangerSystemAccessControl
         return catalogs;
     }
 
-    @Override
     public void checkCanSelectFromView(Identity identity, CatalogSchemaTableName view)
     {
         if (view.getSchemaTableName().getSchemaName().equalsIgnoreCase("information_schema")) {
@@ -121,7 +120,6 @@ public class RangerSystemAccessControl
         }
     }
 
-    @Override
     public void checkCanSelectFromTable(Identity identity, CatalogSchemaTableName table)
     {
         if (table.getSchemaTableName().getSchemaName().equalsIgnoreCase("information_schema")) {
@@ -211,7 +209,7 @@ public class RangerSystemAccessControl
     {
         if (!authorizer.canCreateResource(createResource(schema), identity) ||
                 !writeableCatalogs.contains(schema.getCatalogName())) {
-            denyCreateSchema(schema.getSchemaName());
+            denyCreateSchema(schema.getSchemaName().toString());
         }
     }
 
@@ -220,7 +218,7 @@ public class RangerSystemAccessControl
     {
         if (!authorizer.canCreateResource(createResource(schema), identity) ||
                 !writeableCatalogs.contains(schema.getCatalogName())) {
-            denyDropSchema(schema.getSchemaName());
+            denyDropSchema(schema.getSchemaName().toString());
         }
     }
 
@@ -317,7 +315,6 @@ public class RangerSystemAccessControl
         }
     }
 
-    @Override
     public void checkCanCreateViewWithSelectFromTable(Identity identity, CatalogSchemaTableName table)
     {
         if (table.getSchemaTableName().getSchemaName().equalsIgnoreCase("information_schema")) {
@@ -325,15 +322,14 @@ public class RangerSystemAccessControl
         }
 
         if (!authorizer.canSelectOnResource(createResource(table), identity)) {
-            denyCreateViewWithSelect(table.getSchemaTableName().getTableName());
+            denyCreateViewWithSelect(table.getSchemaTableName().getTableName(), identity);
         }
     }
 
-    @Override
     public void checkCanCreateViewWithSelectFromView(Identity identity, CatalogSchemaTableName view)
     {
         if (!authorizer.canSelectOnResource(createResource(view), identity)) {
-            denyCreateViewWithSelect(view.getSchemaTableName().getTableName());
+            denyCreateViewWithSelect(view.getSchemaTableName().getTableName(), identity);
         }
     }
 
